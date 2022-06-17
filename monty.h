@@ -42,7 +42,7 @@ extern char *push_data;
 char *push_data;
 
 /* Function Prototypes */
-char **split_line(char *line)
+char **tokenize(char *s);
 void (*get_op_func(char *s))(stack_t **stack, unsigned int line_number);
 int stack_len(stack_t **stack);
 void free_stack(stack_t *stack);
