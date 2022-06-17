@@ -1,39 +1,27 @@
 #include "monty.h"
 
 /**
- * div_handler - handles the div instruction
- * @stack: double pointer to the stack to push to
- * @line_number: number of the line in the file
- */
+* div_ - Dvivides the second top element of the stack by the top element
+* @stack: Address of stack whose top elements need to be divided
+* @line_number: Line number of opcode currently being executed
+*/
+
 void div_(stack_t **stack, unsigned int line_number)
 {
-	int div = 0;
-	stack_t *node = NULL;
-	stack_t *node_0 = get_dnodeint_at_index(*stack, 0);
-	stack_t *node_1 = get_dnodeint_at_index(*stack, 1);
+	stack_t *temp = *stack;
+	int result = 0;
 
-	if (dlistint_len(*stack) < 2)
+	if (temp == NULL || temp->next == NULL)
 	{
-		dprintf(STDERR_FILENO, DIV_FAIL, line_number);
-		free_all(1);
+		fprintf(stderr, "L%d: can't div, stack too short\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-
-	if (node_0->n == 0)
+	if (temp->next->n == 0)
 	{
-		dprintf(STDERR_FILENO, DIV_ZERO, line_number);
-		free_all(1);
+		fprintf(stderr, "L%d: division by zero\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-
-	div = node_1->n / node_0->n;
-	delete_dnodeint_at_index(stack, 0);
-	delete_dnodeint_at_index(stack, 0);
-	node = add_dnodeint(stack, div);
-	if (!node)
-	{
-		dprintf(STDERR_FILENO, MALLOC_FAIL);
-		free_all(1);
-		exit(EXIT_FAILURE);
-	}
+	result = (temp->next->n) / (temp->n);
+	pop(stack, line_number);
+	(*stack)->n = result;
 }
