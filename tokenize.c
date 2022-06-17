@@ -1,25 +1,34 @@
 #include "monty.h"
-
 /**
-  * tokenize - Tokenizes a string to return an array of words
-  * @s: The string to be tokenized
-  *
-  * Return: An array of the words
-  */
+ *split_line - parse file into a list of arguments
+ *@line - pointer to the line to be tokenized
+ *Return: returns a pointer to the first token found in the string
+ */
 
-char **tokenize(char *s)
+#define _TOK_DELIM " \t\r\n\a"
+char **split_line(char *line)
 {
+	/*int bufsize = _TOK_BUFSIZE;*/
+	int position = 0;
+	char **tokens = NULL;
+	char **tmp = NULL;
 	char *token;
-	int i = 0;
-	static char *arr[10] = {NULL};
 
-	token = strtok(s, " ");
+	token = strtok(line, _TOK_DELIM);
+
 	while (token != NULL)
 	{
-		arr[i++] = token;
-		token = strtok(NULL, " ");
+		tmp = realloc(tokens, sizeof(char *) * (position + 2));
+		if (tmp == NULL)
+		{
+			fprintf(stderr, "sh: allocation error\n");
+			exit(EXIT_FAILURE);
+		}
+		tokens = tmp;
+		tokens[position] = token;
+		token = strtok(NULL, _TOK_DELIM);
+		position++;
 	}
-	/*arr[i++] = NULL;*/
-
-	return (arr);
+	tokens[position] = NULL;
+	return (tokens);
 }
